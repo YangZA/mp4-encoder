@@ -1,0 +1,24 @@
+version: "3.2"
+
+services:
+  encoder:
+    image: encoder
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: helios
+        target: /mnt
+        volume:
+          nocopy: true
+    environment:
+      - TZ=Africa/Johannesburg
+      - DEBIAN_FRONTEND=noninteractive
+volumes:
+  helios:
+    driver_opts:
+      type: "nfs"
+      o: "addr=helios.dahouse,nolock,soft,rw"
+      device: ":/mnt/data"
